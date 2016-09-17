@@ -1,0 +1,1 @@
+const mony = window.mony = {};
