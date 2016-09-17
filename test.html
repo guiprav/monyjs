@@ -1,0 +1,54 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script src="mony.js"></script>
+
+<script type="template/mony" name="hello">
+  <div>
+    Hello, <span class="who"></span>.
+  </div>
+</script>
+
+<script type="template/mony" name="notFound">
+  <div>
+    Not found!
+  </div>
+</script>
+
+<div class="header" style="margin-bottom: 10px">
+  <h1>This is MonyJS</h1>
+
+  <a href="#/hello/Mony">Hello, Mony!</a>
+  <br><a href="#/hello/Gui">Hello, Gui!</a>
+  <br><a href="#/broken">Error!</a>
+</div>
+
+<div class="pageContent">
+</div>
+
+<script>
+  mony.route('/hello/:who', {
+    enter: req => {
+      const hello = mony.fromTemplate('hello');
+
+      hello.find('.who').text(req.params.who);
+
+      $('.pageContent').empty().append(hello);
+    },
+  });
+
+  mony.routeNotFound({
+    enter: () => {
+      $('h1').hide();
+
+      $('.pageContent').empty().append(
+        mony.fromTemplate('notFound')
+      );
+    },
+
+    leave: () => {
+      $('h1').show();
+    },
+  });
+</script>
