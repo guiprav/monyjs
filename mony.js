@@ -16,6 +16,70 @@ mony.fromTemplate = name => {
   return $($el.html());
 };
 
+function cloneRepeatOriginal($el) {
+  const originalKey = 'monyRepeatOriginal';
+
+  let $original = $el.data(originalKey);
+
+  if ($original) {
+    return $original.clone(true, true);
+  }
+
+  $original = $el.clone(true, true);
+  $original.data(originalKey, $original);
+
+  return $original;
+}
+
+mony.repeat = ($el, array, fn) => {
+  $el.slice(1).remove();
+  $el = $el.first();
+
+  const $elTempl = cloneRepeatOriginal($el);
+
+  const newEls = array
+    .map(data => fn($elTempl.clone(true, true), data))
+    .reduce((a, b) => {
+      if (a instanceof jQuery) {
+        a = a.toArray();
+      }
+
+      if (b instanceof jQuery) {
+        b = b.toArray();
+      }
+
+      if (!Array.isArray(a)) {
+        a = [a];
+      }
+
+      if (!Array.isArray(b)) {
+        b = [b];
+      }
+
+      return a.concat(b);
+    });
+
+  return $(newEls).replaceAll($el);
+};
+
+function recreateRepeatEl($el, data, fn) {
+  return $(fn(cloneRepeatOriginal($el), data));
+}
+
+mony.insertAfter = ($el, data, fn) => {
+  $el = $el.last();
+
+  return recreateRepeatEl($el, data, fn)
+    .insertAfter($el);
+};
+
+mony.insertBefore = ($el, data, fn) => {
+  $el = $el.first();
+
+  return recreateRepeatEl($el, data, fn)
+    .insertBefore($el);
+};
+
 mony.routes = [];
 
 mony.routes.notFound = {
