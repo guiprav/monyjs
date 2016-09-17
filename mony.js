@@ -1,5 +1,11 @@
 const mony = window.mony = {};
 
+const $html = $('html').css('visibility', 'hidden');
+
+$(() => {
+  $html.css('visibility', '');
+});
+
 mony.fromTemplate = name => {
   const $el = $(`script[type="template/mony"][name="${name}"]`);
 
