@@ -168,6 +168,4 @@ $(() => {
       last.route.enter(last.req);
     }
   });
-
-  $wnd.trigger('hashchange');
 });
