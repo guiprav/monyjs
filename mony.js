@@ -128,6 +128,8 @@ mony.matchRoute = (route, path) => {
   return params;
 };
 
+mony.refresh = () => $(window).trigger('hashchange');
+
 $(() => {
   const $wnd = $(window);
 
